@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 18:35:22 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/05/05 08:18:22 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/05/04 10:04:39 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main_check(char **av, int ac)
 	if (!cheek_nb(av, ac))
 	{
 		printf("invalid arguments\n");
-		return (-1);
+		return (0);
 	}
 	return (1);
 }
@@ -29,7 +29,7 @@ int	main(int ac, char *av[])
 	t_data	*philo;
 
 	if (!main_check(av, ac))
-		return (-1);
+		return (0);
 	int c = ft_atoi(av[1]);
 	if (c == 0)
 		return (-1);

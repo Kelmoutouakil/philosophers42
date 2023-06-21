@@ -6,11 +6,38 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 09:54:18 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/06/10 22:56:55 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:45:55 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+
+unsigned long	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	ft_usleep(unsigned int t)
+{
+	long int	time;
+
+	time = get_time();
+	while (get_time() - time < t)
+		usleep(100);
+}
+
+void	init_arg(t_sem *philo, char **av)
+{
+	philo->n_philo = ft_atoi(av[1]);
+	philo->t_die = ft_atoi(av[2]);
+	philo->t_eat = ft_atoi(av[3]);
+	philo->t_sleep = ft_atoi(av[4]);
+	if (av[5])
+		philo->n_eat = ft_atoi(av[5]) * philo->n_philo;
+}
 
 int	main_check(char **av, int ac)
 {
@@ -24,15 +51,45 @@ int	main_check(char **av, int ac)
 	return (1);
 }
 
+void	ft_philo_init(t_sem *philo, char **av)
+{
+	philo->print = NULL;
+	philo->forks = NULL;
+	philo->n_philo = ft_atoi(av[1]);
+	philo->t_die = ft_atoi(av[2]);
+	philo->t_eat = ft_atoi(av[3]);
+	philo->t_sleep = ft_atoi(av[4]);
+	if (av[5])
+		philo->n_eat = ft_atoi(av[5]);
+	//else
+		//philo->state = -1;
+}
+
 void	create_semaphore(t_sem *sem)
 {
 	sem_unlink("print");
 	sem_unlink("forks");
+
 	sem->print = sem_open("print", O_CREAT, 0600, 1);
+
 	sem->forks = sem_open("forks", O_CREAT, 0600, sem->n_philo);
 }
 
-
+void	print(char *s, t_philo *p, int a)
+{
+	if (a != 0)
+	{
+		sem_wait(p->data->print);
+		printf("%ld ms %d ", get_time() - p->data->t_start, p->index);
+		printf("%s\n", s);
+		sem_post(p->data->print);
+	}
+	else
+	{
+		sem_wait(p->data->print);
+		printf("%ld ms %d %s\n", get_time() - p->data->t_start, p->index, s);
+	}
+}
 
 void	*check_death(void *p)
 {
@@ -41,9 +98,10 @@ void	*check_death(void *p)
 	s = (t_philo *)p;
 	while (1)
 	{
-		if (get_time() - s->last_eat >= s->data->t_die)
+		if (get_time() - (s->last_eat.tv_sec * 1000 + s->last_eat.tv_usec
+				/ 1000) >= s->data->t_die)
 		{
-			print("died", s, 1);
+			print("died", s, 0);
 			exit(1);
 		}
 		usleep(100);
@@ -62,43 +120,36 @@ void	philo_life(t_philo p)
 		print("has taken a fork", &p, 1);
 		sem_wait(p.data->forks);
 		print("has taken a fork", &p, 1);
-		p.last_eat = get_time();
-		sem_wait(p.data->print);
+		gettimeofday(&p.last_eat, NULL);
 		print("is eating", &p, 1);
-		sem_post(p.data->print);
+		p.data->n_eat--;
+		ft_usleep(p.data->t_eat);
 		sem_post(p.data->forks);
 		sem_post(p.data->forks);
-		p.count++;
-		if (p.count >= p.data->n_eat)
+		if (p.data->n_eat == 0)
 			exit(0);
-		ft_usleep(p.data->t_eat);	
-		sem_wait(p.data->print);
 		print("is sleeping", &p, 1);
-		sem_post(p.data->print);
 		ft_usleep(p.data->t_sleep);
-		sem_wait(p.data->print);
 		print("is thinking", &p, 1);
-		sem_post(p.data->print);
 		usleep(100);
 	}
 }
 
 int	main(int ac, char **av)
 {
-	int		i;
-	t_sem	*sem;
-	t_philo	*philo;
-	
+	int i;
+	t_sem *sem;
+	t_philo *philo;
+
 	i = -1;
 	sem = malloc(sizeof(t_sem));
 	philo = malloc(sizeof(t_philo) * sem->n_philo);
 	if (ac == 5 || ac == 6)
 	{
 		if (!main_check(av, ac))
-			return (-1);
+			return (0);
 		ft_philo_init(sem, av);
-		if (cheek_arg(sem, av) == -1)
-			return (-1);
+		//cheek_arg(sem, av);
 
 		create_semaphore(sem);
 
@@ -108,23 +159,26 @@ int	main(int ac, char **av)
 			philo[i].data = sem;
 			philo[i].pid = fork();
 			philo[i].data->t_start = get_time();
-			philo[i].last_eat = get_time();
+			gettimeofday(&philo[i].last_eat, NULL);
 			if (philo[i].pid == 0)
 			{
 				philo_life(philo[i]);
 			}
 		}
 		int a;
+		int d = 0;
 		while (1)
 		{
 			waitpid(-1, &a, 0);
+			d++;
 			if (WEXITSTATUS(a) != 0)
 			{
 				int j = 0;
 				while (j < philo->data->n_philo)
 					kill(philo[j++].pid, SIGKILL);
-				exit(0);
 			}
+			if (d == philo->data->n_philo)
+				exit(0);
 		}
 	}
 	else
