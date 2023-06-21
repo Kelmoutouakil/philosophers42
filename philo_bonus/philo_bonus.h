@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 10:00:39 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/06/21 17:44:15 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/22 00:00:16 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define SEM_NAME
 
 # include <fcntl.h>
+# include <limits.h>
 # include <pthread.h>
 # include <semaphore.h>
 # include <signal.h>
@@ -29,11 +30,10 @@ typedef struct s_sem
 	sem_t			*forks;
 	sem_t			*print;
 	sem_t			*died;
-	unsigned		start;
+	unsigned long	start;
 	int				n_philo;
 	unsigned long	t_die;
 	int				n_eat;
-	int				state;
 	unsigned long	t_sleep;
 	unsigned long	t_eat;
 	unsigned long	t_start;
@@ -46,12 +46,22 @@ typedef struct s_philo
 	pid_t			pid;
 	struct timeval	last_eat;
 	int				index;
-	int				count;
 }					t_philo;
 
-void				cheek_arg(t_sem *philo, char **av);
-void				init_arg(t_sem *philo, char **av);
+int					cheek_arg(t_sem *philo, char **av);
 int					cheek_nb(char **s, int ac);
 int					ft_strlen(char *s);
 int					ft_atoi(const char *s);
+int					check_time(t_sem *philo);
+int					main_check(char **av, int ac);
+void				philo_life(t_philo p);
+void				*check_death(void *p);
+void				print(char *s, t_philo *p, int a);
+void				create_semaphore(t_sem *sem);
+void				ft_philo_init(t_sem *philo, char **av);
+void				init_arg(t_sem *philo, char **av);
+void				ft_usleep(unsigned int t);
+unsigned long		get_time(void);
+void				exit_process(t_philo *philo, t_sem *sem);
+void				routine(t_philo *philo, t_sem *sem);
 #endif

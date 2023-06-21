@@ -1,7 +1,7 @@
 CC=gcc
 NAME=philo_bonus
-CFLAGS=-Wall -Wextra -Werror -fsanitize=thread -g3
-SRC = main.c mylibft_bonus.c utils_bonus.c init_bonus.c cheek_bonus.c philo_bonus.c
+CFLAGS=-Wall -Wextra -Werror #-fsanitize=thread -g3
+SRC = main.c mylibft_bonus.c  init_bonus.c cheek_bonus.c philo_bonus.c
 
 
 OBJ=$(SRC:.c=.o)
