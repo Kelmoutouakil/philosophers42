@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 18:35:22 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/05/04 10:04:39 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/22 13:36:13 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ int	main_check(char **av, int ac)
 int	main(int ac, char *av[])
 {
 	t_data	*philo;
+	int		c;
 
 	if (!main_check(av, ac))
 		return (0);
-	int c = ft_atoi(av[1]);
+	c = ft_atoi(av[1]);
 	if (c == 0)
 		return (-1);
 	philo = malloc(sizeof(t_data) * c);

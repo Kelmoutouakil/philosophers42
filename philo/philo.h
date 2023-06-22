@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 18:36:24 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/05/04 10:03:13 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/22 13:36:46 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int					ft_isdigit(int c);
 int					cheek_death(t_philo *p);
 void				ft_putstr(char *s);
 int					cheek_arg(t_data *philo, char **av);
-void					init_arg(t_data *philo, char **av);
+void				init_arg(t_data *philo, char **av);
 void				ft_get_id(t_data *p);
 unsigned long		get_time(void);
 void				ft_usleep(unsigned int t);

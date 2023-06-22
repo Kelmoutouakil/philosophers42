@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 20:55:14 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/05/04 09:55:12 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/22 13:36:29 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	cheek_arg(t_data *philo, char **av)
 		printf("philo should be at least 1 time !\n");
 		return (-1);
 	}
-	if (philo->n_philo < 1 || philo->n_philo > 200 )
+	if (philo->n_philo < 1 || philo->n_philo > 200)
 	{
-		printf("number of philo should be at least 1 philo  at max 200!\n"); 
+		printf("number of philo should be at least 1 philo  at max 200!\n");
 		return (-1);
 	}
 	if (!philo->t_die || !philo->t_eat || !philo->t_sleep)
