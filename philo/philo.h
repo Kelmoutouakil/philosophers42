@@ -6,13 +6,14 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 18:36:24 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/06/22 13:36:46 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:37:07 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <limits.h>
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -43,6 +44,7 @@ typedef struct l_data
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	m_time;
 	pthread_mutex_t	print;
+	pthread_mutex_t	countt;
 }					t_data;
 
 int					ft_isdigit(int c);

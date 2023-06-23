@@ -6,19 +6,24 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 20:03:44 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/05/04 10:02:02 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:40:14 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	ft_life(t_philo *p)
+{
+	if (p->id % 2 == 0)
+		usleep(600);
+}
 
 void	*philo_life(void *philo)
 {
 	t_philo	*p;
 
 	p = ((t_philo *)philo);
-	if (p->id % 2 == 0)
-		usleep(600);
+	ft_life(p);
 	while (1)
 	{
 		pthread_mutex_lock(&p->data->fork[p->index1]);
@@ -26,7 +31,9 @@ void	*philo_life(void *philo)
 		pthread_mutex_lock(&p->data->fork[p->index2]);
 		print("has taken a fork", p, 1);
 		print("is eating", p, 1);
+		pthread_mutex_lock(&p->data->countt);
 		p->data->count++;
+		pthread_mutex_unlock(&p->data->countt);
 		ft_usleep(p->data->t_eat);
 		pthread_mutex_lock(&p->data->m_time);
 		p->last_eat = get_time();
@@ -53,6 +60,7 @@ int	init_philo(t_data *philo, char **av)
 	philo->fork = malloc(sizeof(pthread_mutex_t) * philo->n_philo);
 	pthread_mutex_init(&philo->m_time, NULL);
 	pthread_mutex_init(&philo->print, NULL);
+	pthread_mutex_init(&philo->countt, NULL);
 	ft_get_id(philo);
 	philo->count = 0;
 	while (i < philo->n_philo)

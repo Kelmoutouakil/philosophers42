@@ -1,6 +1,6 @@
 CC=gcc
 NAME=philo_bonus
-CFLAGS=-Wall -Wextra -Werror #-fsanitize=thread -g3
+CFLAGS=-Wall -Wextra -Werror 
 SRC = main.c mylibft_bonus.c  init_bonus.c cheek_bonus.c philo_bonus.c
 
 

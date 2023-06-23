@@ -6,7 +6,7 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 11:03:30 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/06/21 23:58:37 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:59:31 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	check_time(t_sem *philo)
 
 int	cheek_arg(t_sem *philo, char **av)
 {
-	if (philo->n_philo < 1 || philo->n_philo > 200)
+	if (philo->n_philo < 1 || philo->n_philo > INT_MAX)
 	{
 		printf("number of philo should be at least 1 philo  at max 200!\n");
 		return (-1);
@@ -63,7 +63,7 @@ int	main_check(char **av, int ac)
 {
 	if (ac != 5 && ac != 6)
 	{
-		printf(" too many arguments\n");
+		printf("  error of number of arguments\n ");
 		return (0);
 	}
 	if (!cheek_nb(av, ac))
@@ -71,6 +71,8 @@ int	main_check(char **av, int ac)
 		printf("invalid arguments\n");
 		return (0);
 	}
+	if (ft_atoi(av[1]) > INT_MAX)
+		return (0);
 	return (1);
 }
 

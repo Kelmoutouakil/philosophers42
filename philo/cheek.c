@@ -6,29 +6,46 @@
 /*   By: kelmouto <kelmouto@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 20:55:14 by kelmouto          #+#    #+#             */
-/*   Updated: 2023/06/22 13:36:29 by kelmouto         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:36:41 by kelmouto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	cheek_arg(t_data *philo, char **av)
+int	check_time(t_data *philo)
 {
-	if (av[5] && philo->n_eat == 0)
+	if (philo->t_die <= 0 || philo->t_die > INT_MAX)
 	{
-		printf("philo should be at least 1 time !\n");
+		printf("invalid time\n");
 		return (-1);
 	}
-	if (philo->n_philo < 1 || philo->n_philo > 200)
+	if ((philo->t_eat <= 0 || philo->t_eat > INT_MAX))
+	{
+		printf("invalid time\n");
+		return (-1);
+	}
+	if ((philo->t_sleep <= 0 || philo->t_sleep > INT_MAX))
+	{
+		printf("invalid time\n");
+		return (-1);
+	}
+	return (0);
+}
+
+int	cheek_arg(t_data *philo, char **av)
+{
+	if (philo->n_philo < 1 || philo->n_philo > INT_MAX)
 	{
 		printf("number of philo should be at least 1 philo  at max 200!\n");
 		return (-1);
 	}
-	if (!philo->t_die || !philo->t_eat || !philo->t_sleep)
+	else if (av[5] && philo->n_eat == 0)
 	{
-		printf("invalid time !\n");
+		printf("philo should be at least 1 time !\n");
 		return (-1);
 	}
+	else if (check_time(philo))
+		return (-1);
 	return (0);
 }
 
